@@ -18,8 +18,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="ロゴ.png" translatesAutoresizingMaskIntoConstraints="NO" id="YXk-0m-Cr7">
-                                <rect key="frame" x="0.0" y="164" width="375" height="339"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="utatane.png" translatesAutoresizingMaskIntoConstraints="NO" id="FgW-js-CiT">
+                                <rect key="frame" x="116" y="255" width="142" height="156"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                         </subviews>
@@ -29,10 +29,10 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-44" y="81.409295352323838"/>
+            <point key="canvasLocation" x="-98.400000000000006" y="110.19490254872565"/>
         </scene>
     </scenes>
     <resources>
-        <image name="ロゴ.png" width="500" height="500"/>
+        <image name="utatane.png" width="4338" height="4338"/>
     </resources>
 </document>

@@ -8,15 +8,18 @@
 
 import UIKit
 import UserNotifications
+import AVFoundation
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, with: .mixWithOthers)
+        try? AVAudioSession.sharedInstance().setActive(true)
         
         //通知していいかの確認
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert,.sound,.badge], completionHandler:{ (success, error) in
@@ -25,11 +28,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         })
         
-        UIApplication.shared.isIdleTimerDisabled = true//スリープ状態になる
+        UIApplication.shared.isIdleTimerDisabled = true//スリープ状態にならない
         
         return true
 
     }
+    
     
 
 

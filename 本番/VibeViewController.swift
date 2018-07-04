@@ -9,15 +9,17 @@
 import UIKit
 import UserNotifications//通知フレームワーク追加
 import AVKit//AVKitフレームワークに追加
+import AudioToolbox
 
 class VibeViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDataSource {
 
     @IBOutlet weak var testLabel: UILabel!
     @IBOutlet weak var testPickerView: UIPickerView!
-    
+    @IBOutlet weak var StartButton: UIButton!
     
     var timer:Timer = Timer()
     var count:Int = 0
+    
     
     //時分秒のデータ
     let dataList = [ [Int](0...59), [Int](0...59)]
@@ -57,7 +59,6 @@ class VibeViewController: UIViewController,UIPickerViewDelegate,UIPickerViewData
     
             setNotificationAftrer(second: count)
             
-            UIScreen.main.brightness = CGFloat(0.5);//0~1 (1=一番明るい)
         }
     
         //タイマーから呼び出されるメソッド(関数)
@@ -74,6 +75,26 @@ class VibeViewController: UIViewController,UIPickerViewDelegate,UIPickerViewData
                 timer.invalidate()
                 //震える
                 Vibe()
+            
+                //アラート表示
+                let alert = UIAlertController(
+                    title: "アラームを止めますか?", message: "", preferredStyle: UIAlertControllerStyle.alert)
+                
+                
+                
+                let defaultAction = UIAlertAction(title: "OK", style: .default, handler:{
+                    // ボタンが押された時の処理を書く（クロージャ実装）
+                    (action: UIAlertAction!) -> Void in
+                    //ここに処理を書く
+//                    self. バイブを止める処理　聞く
+                    self.testLabel.text = "少しお休みしませんか?"
+                })
+                
+                //
+                alert.addAction(defaultAction)
+                
+                //
+                present(alert,animated: true,completion: nil)
             }
     
         }
@@ -112,10 +133,11 @@ class VibeViewController: UIViewController,UIPickerViewDelegate,UIPickerViewData
     
     
     
-        //震える　ずっと震えさせる方法考える
+        //震える　ずっと震えさせる方法考える ポケットリファレンスの90%を参照
         func Vibe() {
-          AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
-        }
+            AudioServicesPlayAlertSound(kSystemSoundID_Vibrate)
+//タイマーで繰り返す。
+    }
     
     @IBAction func CancelButton(_ sender: UIButton) {
         timer.invalidate()
@@ -188,6 +210,21 @@ class VibeViewController: UIViewController,UIPickerViewDelegate,UIPickerViewData
         pickerLabel.backgroundColor = UIColor.init(red: 255/255, green: 255/255, blue: 183/255, alpha: 1)
         
         return pickerLabel
+    }
+    
+    //コロコロがとまったときに処理される。
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        
+        //        print(dataList[0][0])
+        //        print(self.testPickerView.selectedRow(inComponent: 0))
+        if self.testPickerView.selectedRow(inComponent: 0) == 0 && self.testPickerView.selectedRow(inComponent: 1) == 0 {
+            StartButton.isEnabled = false
+        } else {
+            StartButton.isEnabled = true
+        }
+        //        if dataList[0] == [0] {
+        //            print(dataList[0])
+        //        }
     }
 
     override func didReceiveMemoryWarning() {

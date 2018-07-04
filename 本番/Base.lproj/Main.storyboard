@@ -60,13 +60,14 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="music" image="oto" selectedImage="oto" id="0al-o8-3P5"/>
                     <connections>
+                        <outlet property="StartButton" destination="BE7-C8-RIm" id="zWC-hG-3A3"/>
                         <outlet property="testLabel" destination="ekP-ww-ghh" id="3nv-pS-ZBp"/>
                         <outlet property="testPickerView" destination="h4M-lV-WKj" id="E2m-L3-2Kw"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iO7-v3-ZNy" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1738" y="-5021"/>
+            <point key="canvasLocation" x="-2145" y="-4873"/>
         </scene>
         <!--light-->
         <scene sceneID="tne-QT-ifu">
@@ -113,13 +114,14 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="light" image="test" selectedImage="test" id="T94-OQ-RXa"/>
                     <connections>
+                        <outlet property="StartButton" destination="pWe-y4-TuQ" id="dBg-l4-HzL"/>
                         <outlet property="testLabel" destination="3wC-2Y-QAk" id="w2B-zz-CPO"/>
                         <outlet property="testPickerView" destination="R4N-gq-6rh" id="OAl-Vp-ckZ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2721" y="-5290"/>
+            <point key="canvasLocation" x="-3527" y="-5420"/>
         </scene>
         <!--Vive-->
         <scene sceneID="COu-W1-c7r">
@@ -166,13 +168,14 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Vive" image="nami" selectedImage="nami" id="vAe-8C-bCG"/>
                     <connections>
+                        <outlet property="StartButton" destination="YzE-el-vpa" id="9oc-nj-iby"/>
                         <outlet property="testLabel" destination="G1h-tl-c8u" id="G2b-2u-waj"/>
                         <outlet property="testPickerView" destination="a7r-xo-HqT" id="AsF-F8-qzC"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lgc-2j-1bb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1738" y="-3879"/>
+            <point key="canvasLocation" x="-2846" y="-4078"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="XtG-Q5-bet">
@@ -191,7 +194,7 @@
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aqS-gp-5X0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-3518" y="-5039"/>
+            <point key="canvasLocation" x="-4375" y="-5103"/>
         </scene>
     </scenes>
     <resources>

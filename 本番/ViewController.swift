@@ -16,6 +16,8 @@ class ViewController:UIViewController,UIPickerViewDelegate,UIPickerViewDataSourc
     @IBOutlet weak var testLabel: UILabel!
     @IBOutlet weak var testPickerView: UIPickerView!
     
+    @IBOutlet weak var StartButton: UIButton!
+    
     
     var timer:Timer = Timer()
     var count:Int = 0
@@ -44,8 +46,7 @@ class ViewController:UIViewController,UIPickerViewDelegate,UIPickerViewDataSourc
     
     //ライトボタンタップされたら発動.
     @IBAction func setTimerNotification(_ sender: UIButton) {
-     
-
+        
         
         let alert = UIAlertController(
             title: "アプリは起動状態のままでお願いします。", message: "よろしいですか?", preferredStyle: UIAlertControllerStyle.alert)
@@ -65,16 +66,18 @@ class ViewController:UIViewController,UIPickerViewDelegate,UIPickerViewDataSourc
             
             self.setNotificationAftrer(second: self.count)
             
-            // タイマーが0の時にボタンを押せなくする できない聞く
-//            if self.timer.timeInterval == 0 {
-//                sender.isEnabled = false
-//            }
-//
-//            if self.dataList[0] == [Int(0)] {
-//                print("あ")
-//            }
+            UIScreen.main.brightness = CGFloat(0.1);//0~1 (1=一番明るい)
             
+           self.StartButton.setImage(UIImage(named: "Stop"), for: UIControlState())
+            
+//            print(self.StartButton.image)
+//            if self.StartButton == UIImage(named: "Stop") {
+//                print("せいこう")
+//            }
         })
+        
+        
+        
         // キャンセルボタン
         let cancelAction: UIAlertAction = UIAlertAction(title: "キャンセル", style: UIAlertActionStyle.cancel, handler:{
             // ボタンが押された時の処理を書く（クロージャ実装）
@@ -91,6 +94,46 @@ class ViewController:UIViewController,UIPickerViewDelegate,UIPickerViewDataSourc
     }
     
     //光タイマーから呼び出されるメソッド(関数)
+//    @objc func countDown(){
+//
+//        //カウントを減らす。
+//        count -= 1
+//
+//        //カウントダウン状況をラベルに表示
+//        if(count > 0) {
+//            testLabel.text = "残り\(count)秒です。"//ここをいじるはず分ラベルと秒ラベルで操作?
+//        } else {
+//            testLabel.text = "カウントダウン終了"
+//            timer.invalidate()
+//            //光らせる
+//            Hikari()
+//        }
+//
+//    }
+    
+//    @objc func countDown(){
+//
+//                //カウントを減らす。
+//                count -= 1
+//
+//                //カウントダウン状況をラベルに表示
+//                if(count >= 60) {
+//                    let minuteCount = count / 60
+//                    testLabel.text = String(minuteCount)
+//                    testLabel.text = "残り\(minuteCount)分\(count)秒です。"
+//                } else if count < 60{
+//                    testLabel.text = String(count)
+//                    testLabel.text = "残り\(count)秒です。"
+//        } else
+//        {
+//                    testLabel.text = "カウントダウン終了"
+//                    timer.invalidate()
+//                    //光らせる
+//                Hikari()
+//                }
+//
+//            }
+    
     @objc func countDown(){
         
         //カウントを減らす。
@@ -98,15 +141,39 @@ class ViewController:UIViewController,UIPickerViewDelegate,UIPickerViewDataSourc
         
         //カウントダウン状況をラベルに表示
         if(count > 0) {
-            testLabel.text = "残り\(count)秒です。"//ここをいじるはず分ラベルと秒ラベルで操作?
+            testLabel.text = "残り\(count)秒です。"
         } else {
             testLabel.text = "カウントダウン終了"
             timer.invalidate()
-            //光らせる
+            //震える
             Hikari()
+            
+            //アラート表示
+            let alert = UIAlertController(
+                title: "アラームを止めますか?", message: "", preferredStyle: UIAlertControllerStyle.alert)
+            
+            
+            
+            let defaultAction = UIAlertAction(title: "OK", style: .default, handler:{
+                // ボタンが押された時の処理を書く（クロージャ実装）
+                (action: UIAlertAction!) -> Void in
+                //ここに処理を書く
+                 let device = AVCaptureDevice.default(for: AVMediaType.video)
+                 device?.torchMode = AVCaptureDevice.TorchMode.off //Off
+                 device?.unlockForConfiguration()//上のとセット
+                self.testLabel.text = "少しお休みしませんか?"
+            })
+            
+            //
+            alert.addAction(defaultAction)
+            
+            //
+            present(alert,animated: true,completion: nil)
+            
         }
         
     }
+    
     
     //自作関数だよ! 一回保留
     func setNotificationAftrer(second:Int) {
@@ -160,15 +227,14 @@ class ViewController:UIViewController,UIPickerViewDelegate,UIPickerViewDataSourc
    
     @IBAction func CancelButton(_ sender: UIButton) {
         //timerが動いてるなら.
-        if timer.isValid == true {
-            
+        // TODO: 動いてるけど、条件が正しくないかも
+        //光を消すならしたのを
+        if timer.isValid == false {
             //timerを破棄する.
             timer.invalidate()
             testLabel.text = "少しお休みしませんか?"
-            let device = AVCaptureDevice.default(for: AVMediaType.video)
-            device?.torchMode = AVCaptureDevice.TorchMode.off //Off
-            device?.unlockForConfiguration()//上のとセット
         }
+        
     }
     
     
@@ -238,6 +304,20 @@ class ViewController:UIViewController,UIPickerViewDelegate,UIPickerViewDataSourc
         pickerLabel.backgroundColor = UIColor.init(red: 255/255, green: 255/255, blue: 183/255, alpha: 1)
         
         return pickerLabel
+    }
+    //コロコロがとまったときに処理される。
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        
+//        print(dataList[0][0])
+//        print(self.testPickerView.selectedRow(inComponent: 0))
+        if self.testPickerView.selectedRow(inComponent: 0) == 0 && self.testPickerView.selectedRow(inComponent: 1) == 0 {
+            StartButton.isEnabled = false
+        } else {
+            StartButton.isEnabled = true
+        }
+//        if dataList[0] == [0] {
+//            print(dataList[0])
+//        }
     }
     
     

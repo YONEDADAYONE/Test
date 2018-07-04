@@ -9,16 +9,19 @@
 import UIKit
 import UserNotifications//通知フレームワーク追加
 import AVKit//AVKitフレームワークに追加
+import AVFoundation//音鳴らしたい
 
 class musicViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDataSource  {
 
     
     @IBOutlet weak var testLabel: UILabel!
     @IBOutlet weak var testPickerView: UIPickerView!
-    
+    @IBOutlet weak var StartButton: UIButton!
     
     var timer:Timer = Timer()
     var count:Int = 0
+    var audioPlayer:AVAudioPlayer!
+    var player: AVAudioPlayer?
     
     //時分秒のデータ
     let dataList = [ [Int](0...59), [Int](0...59)]
@@ -55,6 +58,7 @@ class musicViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDat
         timer = Timer.scheduledTimer(timeInterval: 1, target:self, selector: #selector(countDown), userInfo:nil, repeats:true)
         
         setNotificationAftrer(second: count)
+        
     }
     
     //光タイマーから呼び出されるメソッド(関数)
@@ -71,7 +75,27 @@ class musicViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDat
             timer.invalidate()
             //光らせる
             ongaku()
+            
+            //アラート表示
+            let alert = UIAlertController(
+                title: "アラームを止めますか?", message: "", preferredStyle: UIAlertControllerStyle.alert)
+            
+            
+            let defaultAction = UIAlertAction(title: "OK", style: .default, handler:{
+                // ボタンが押された時の処理を書く（クロージャ実装）
+                (action: UIAlertAction!) -> Void in
+                //ここに処理を書く
+                self.audioPlayer.stop()
+                self.testLabel.text = "少しお休みしませんか?"
+            })
+            
+            //
+            alert.addAction(defaultAction)
+            
+            //
+            present(alert,animated: true,completion: nil)
         }
+        
         
     }
     
@@ -115,18 +139,18 @@ class musicViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDat
         let content = UNMutableNotificationContent()
         
         //通知のタイトル本文の設定
-        content.title = "通知のタイトルだよ"
-        content.body = "おはよう"
+        content.title = "指定した時間になりました。"
+        content.body = "起きましょう!"
         
-        //        //音設定
-        //        content.sound = UNNotificationSound.default()
+        //音設定
+        content.sound = UNNotificationSound(named: "song_28_nerine.mp3")
         
         
         //トリガー設定
         let trigger = UNTimeIntervalNotificationTrigger.init(timeInterval: TimeInterval(second), repeats: false)
         
         //リクエスト
-        let request = UNNotificationRequest.init(identifier: "ID_AfterSecOnce", content: content, trigger: trigger)
+        let request = UNNotificationRequest.init(identifier: "ID_AfterSecOnceMusic", content: content, trigger: trigger)
         
         //通知のセット
         UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
@@ -135,13 +159,22 @@ class musicViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDat
     
     //鳴らす
     func ongaku() {
-        let music: SystemSoundID = 1005
-            AudioServicesPlayAlertSound(music)
+        if (audioPlayer.isPlaying) {
+            audioPlayer.play()
+//            setTitle("Stop", for: UIControlState())
+        }
+        else{
+            audioPlayer.play()
+//            setTitle("Play", for: UIControlState())
+        }
+        
+        
         }
 
     
     @IBAction func CancelButton(_ sender: UIButton) {
         timer.invalidate()
+        
     }
     
     override func viewDidLoad() {
@@ -150,6 +183,28 @@ class musicViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDat
         
         //背景を設定
         self.view.backgroundColor = UIColor.init(red: 234/255, green: 255/255, blue: 255/255, alpha: 1)
+        
+        //再生する　audio ファイルのパスを作成
+        let audioPath = Bundle.main.path(forResource: "song_28_nerine", ofType: "mp3")!
+        let audioUrl = URL(fileURLWithPath: audioPath)
+        
+        //audio を再生するプレイヤーを作成する
+        var audioError:NSError?
+        do {
+            audioPlayer = try AVAudioPlayer(contentsOf: audioUrl)
+        } catch let error as NSError {
+            audioError = error
+            audioPlayer = nil
+        }
+        
+        //エラーが起きたとき
+        if let error = audioError {
+            print("Error \(error.localizedDescription)")
+        }
+        
+        //謎のFixつけた。要質問
+        audioPlayer.delegate = self as? AVAudioPlayerDelegate
+        audioPlayer.prepareToPlay()
         
 //        //「時間」のラベルを追加
 //        let hStr = UILabel()
@@ -162,7 +217,7 @@ class musicViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDat
         
         //「分」のラベルを追加
         let mStr = UILabel()
-        mStr.text = "分"
+        mStr.text = "minute"
         mStr.sizeToFit()
         mStr.frame = CGRectMake(testPickerView.bounds.width/2.41 - mStr.bounds.width/2,
                                 testPickerView.bounds.height/2 - (mStr.bounds.height/2),
@@ -172,7 +227,7 @@ class musicViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDat
         
         //「秒」のラベルを追加
         let sStr = UILabel()
-        sStr.text = "秒"
+        sStr.text = "second"
         sStr.sizeToFit()
         sStr.frame = CGRectMake(testPickerView.bounds.width/1.48 - sStr.bounds.width/2,
                                 testPickerView.bounds.height/2 - (sStr.bounds.height/2),
@@ -213,6 +268,20 @@ class musicViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDat
         return pickerLabel
     }
     
+    //コロコロがとまったときに処理される。
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        
+        //        print(dataList[0][0])
+        //        print(self.testPickerView.selectedRow(inComponent: 0))
+        if self.testPickerView.selectedRow(inComponent: 0) == 0 && self.testPickerView.selectedRow(inComponent: 1) == 0 {
+            StartButton.isEnabled = false
+        } else {
+            StartButton.isEnabled = true
+        }
+        //        if dataList[0] == [0] {
+        //            print(dataList[0])
+        //        }
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
