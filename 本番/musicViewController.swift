@@ -75,7 +75,7 @@ class musicViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDat
             timer.invalidate()
             //光らせる
             ongaku()
-            
+            audioPlayer.numberOfLoops = -1
             //アラート表示
             let alert = UIAlertController(
                 title: "アラームを止めますか?", message: "", preferredStyle: UIAlertControllerStyle.alert)
@@ -143,18 +143,45 @@ class musicViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDat
         content.body = "起きましょう!"
         
         //音設定
-        content.sound = UNNotificationSound(named: "song_28_nerine.mp3")
+        content.sound = UNNotificationSound(named: "birdland1.mp3")
+        
+//        //トリガー設定
+//        let trigger = UNTimeIntervalNotificationTrigger.init(timeInterval: TimeInterval(second), repeats: false)
+//        
+//        //リクエスト
+//        let request = UNNotificationRequest.init(identifier: "ID_AfterSecOnceMusic", content: content, trigger: trigger)
+//        
+//        //通知のセット
+//        UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
         
         
-        //トリガー設定
-        let trigger = UNTimeIntervalNotificationTrigger.init(timeInterval: TimeInterval(second), repeats: false)
-        
-        //リクエスト
-        let request = UNNotificationRequest.init(identifier: "ID_AfterSecOnceMusic", content: content, trigger: trigger)
-        
-        //通知のセット
-        UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
-        
+        //バックグラウンドだよ
+        //for i in stride(from: 開始位置, to: 終了位置, by: 間隔)
+        for i in stride(from: 1, to: 50, by: 5) {
+            //トリガー設定
+            let trigger = UNTimeIntervalNotificationTrigger.init(timeInterval: TimeInterval(second + i), repeats: false)
+            
+            //リクエスト 復習
+            let request = UNNotificationRequest.init(identifier: "ID_AfterSecOnce\(i)", content: content, trigger: trigger)
+            
+            //通知のセット
+            UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
+            
+            //[iOS8以降]Push通知の実装とテスト(swift)を参考
+            func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
+                switch application.applicationState {
+                case .active:
+                    timer.invalidate()
+                    break
+                case .inactive:
+                    timer.invalidate()
+                    break
+                case .background:
+                    timer.invalidate()
+                    break
+                }
+            }
+        }
     }
     
     //鳴らす
@@ -173,7 +200,11 @@ class musicViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDat
 
     
     @IBAction func CancelButton(_ sender: UIButton) {
-        timer.invalidate()
+        if timer.isValid == true {
+            //timerを破棄する.
+            timer.invalidate()
+            testLabel.text = "少しお休みしませんか?"
+        }
         
     }
     
@@ -185,7 +216,7 @@ class musicViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDat
         self.view.backgroundColor = UIColor.init(red: 234/255, green: 255/255, blue: 255/255, alpha: 1)
         
         //再生する　audio ファイルのパスを作成
-        let audioPath = Bundle.main.path(forResource: "song_28_nerine", ofType: "mp3")!
+        let audioPath = Bundle.main.path(forResource: "birdland1", ofType: "mp3")!
         let audioUrl = URL(fileURLWithPath: audioPath)
         
         //audio を再生するプレイヤーを作成する

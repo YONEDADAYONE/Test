@@ -10,17 +10,26 @@ import UIKit
 import UserNotifications//通知フレームワーク追加
 import AVKit//AVKitフレームワークに追加
 
+
 class ViewController:UIViewController,UIPickerViewDelegate,UIPickerViewDataSource {
     
     
     @IBOutlet weak var testLabel: UILabel!
     @IBOutlet weak var testPickerView: UIPickerView!
-    
     @IBOutlet weak var StartButton: UIButton!
     
     
     var timer:Timer = Timer()
     var count:Int = 0
+    var gameStartTime:Date = Date()//変化する値を入れるので変数
+    var gamePauseTime:Date = Date()//変化する値を入れるので変数
+//    let foregoundDate = Date()
+    let backgroundDate = Int(Date().timeIntervalSince1970)
+    let start = NSDate()
+    let beforeTime = NSDate()
+    let currentTime = NSDate()
+    
+    
     
     //時分秒のデータ
     var dataList = [ [Int](0...59), [Int](0...59)]
@@ -68,7 +77,8 @@ class ViewController:UIViewController,UIPickerViewDelegate,UIPickerViewDataSourc
             
             UIScreen.main.brightness = CGFloat(0.1);//0~1 (1=一番明るい)
             
-           self.StartButton.setImage(UIImage(named: "Stop"), for: UIControlState())
+//            self.itiji()
+//           self.StartButton.setImage(UIImage(named: "Stop"), for: UIControlState())
             
 //            print(self.StartButton.image)
 //            if self.StartButton == UIImage(named: "Stop") {
@@ -94,22 +104,22 @@ class ViewController:UIViewController,UIPickerViewDelegate,UIPickerViewDataSourc
     }
     
     //光タイマーから呼び出されるメソッド(関数)
-//    @objc func countDown(){
-//
-//        //カウントを減らす。
-//        count -= 1
-//
-//        //カウントダウン状況をラベルに表示
-//        if(count > 0) {
-//            testLabel.text = "残り\(count)秒です。"//ここをいじるはず分ラベルと秒ラベルで操作?
-//        } else {
-//            testLabel.text = "カウントダウン終了"
-//            timer.invalidate()
-//            //光らせる
-//            Hikari()
-//        }
-//
-//    }
+    @objc func countDown(){
+
+        //カウントを減らす。
+        count -= 1
+        
+        //カウントダウン状況をラベルに表示
+        if(count > 0) {
+            testLabel.text = "残り\(count)秒です。"//ここをいじるはず分ラベルと秒ラベルで操作?
+        } else {
+            testLabel.text = "カウントダウン終了"
+            timer.invalidate()
+            //光らせる
+            Hikari()
+        }
+
+    }
     
 //    @objc func countDown(){
 //
@@ -134,47 +144,6 @@ class ViewController:UIViewController,UIPickerViewDelegate,UIPickerViewDataSourc
 //
 //            }
     
-    @objc func countDown(){
-        
-        //カウントを減らす。
-        count -= 1
-        
-        //カウントダウン状況をラベルに表示
-        if(count > 0) {
-            testLabel.text = "残り\(count)秒です。"
-        } else {
-            testLabel.text = "カウントダウン終了"
-            timer.invalidate()
-            //震える
-            Hikari()
-            
-            //アラート表示
-            let alert = UIAlertController(
-                title: "アラームを止めますか?", message: "", preferredStyle: UIAlertControllerStyle.alert)
-            
-            
-            
-            let defaultAction = UIAlertAction(title: "OK", style: .default, handler:{
-                // ボタンが押された時の処理を書く（クロージャ実装）
-                (action: UIAlertAction!) -> Void in
-                //ここに処理を書く
-                 let device = AVCaptureDevice.default(for: AVMediaType.video)
-                 device?.torchMode = AVCaptureDevice.TorchMode.off //Off
-                 device?.unlockForConfiguration()//上のとセット
-                self.testLabel.text = "少しお休みしませんか?"
-            })
-            
-            //
-            alert.addAction(defaultAction)
-            
-            //
-            present(alert,animated: true,completion: nil)
-            
-        }
-        
-    }
-    
-    
     //自作関数だよ! 一回保留
     func setNotificationAftrer(second:Int) {
         // Notification のインスタンスを作成
@@ -185,18 +154,35 @@ class ViewController:UIViewController,UIPickerViewDelegate,UIPickerViewDataSourc
         content.body = "指定した時刻になりました"
         
 //        //音設定
-//        content.sound = UNNotificationSound.default()
+        content.sound = UNNotificationSound.init(named: "Silent3sec.mp3")
         
+        //バックグラウンドだよ
         
-        //トリガー設定
-        let trigger = UNTimeIntervalNotificationTrigger.init(timeInterval: TimeInterval(second), repeats: false)
-        
-        //リクエスト
-        let request = UNNotificationRequest.init(identifier: "ID_AfterSecOnce", content: content, trigger: trigger)
-        
-        //通知のセット
-        UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
-        
+        for i in 1...15 {
+            //トリガー設定
+            let trigger = UNTimeIntervalNotificationTrigger.init(timeInterval: TimeInterval(second + i), repeats: false)
+            
+            //リクエスト 復習
+            let request = UNNotificationRequest.init(identifier: "ID_AfterSecOnce\(i)", content: content, trigger: trigger)
+            
+            //通知のセット
+            UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
+            
+            //[iOS8以降]Push通知の実装とテスト(swift)を参考
+            func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
+                switch application.applicationState {
+                case .active:
+                    timer.invalidate()
+                    break
+                case .inactive:
+                    timer.invalidate()
+                    break
+                case .background:
+                    timer.invalidate()
+                    break
+                }
+            }
+        }
     }
     
     //光らせる
@@ -215,21 +201,12 @@ class ViewController:UIViewController,UIPickerViewDelegate,UIPickerViewDataSourc
 //        }
     }
     
-
-    //バックグラウンドだよ
     
-
-    
-//    //震える　ずっと震えさせる方法考える
-//    func Vibe() {
-//        AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
-//    }
-   
     @IBAction func CancelButton(_ sender: UIButton) {
         //timerが動いてるなら.
         // TODO: 動いてるけど、条件が正しくないかも
         //光を消すならしたのを
-        if timer.isValid == false {
+        if timer.isValid == true {
             //timerを破棄する.
             timer.invalidate()
             testLabel.text = "少しお休みしませんか?"
@@ -237,22 +214,49 @@ class ViewController:UIViewController,UIPickerViewDelegate,UIPickerViewDataSourc
         
     }
     
+//    //一時停止　再開　メソッド
+//    func itiji() {
+//
+//        if timer.isValid == true {
+////        //一時停止
+//        self.gameStartTime = Date()
+//        self.gamePauseTime(false)//タイマーを削除
+//        self.StartButton.setImage(UIImage(named: "Stop"), for: UIControlState())
+//
+//        }else {
+//            //再開
+//            //timerを生成する.
+//            timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector:#selector(self.countDown), userInfo: nil, repeats: true)
+//
+//            self.StartButton.setImage(UIImage(named: "Start"), for: UIControlState())
+//        }
+//
+//    }
+    
+//    // タイマーを止めたり動かしたりするメソッド
+//    func timerStopStart(setFlg: Bool){
+//        if setFlg || self.timer == nil {
+//            // 一時停止時間から、最初の時間を引いて、その分をタイマーセット時間から引く
+//            let defTime = self.gamePauseTime.timeIntervalSince1970 - self.gameStartTime.timeIntervalSince1970
+//            // タイマーを入れなおす
+//            self.gameClearTimer = Timer.scheduledTimer(timeInterval: 60 - defTime, target: self, selector: #selector(ViewController.clearFunc), userInfo: nil, repeats: false);
+//        } else {
+//            self.timer.invalidate();
+//        }
+//    }
+    
+
+    
+    
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
         self.view.backgroundColor = UIColor.init(red: 234/255, green: 255/255, blue: 255/255, alpha: 1) //背景
-        
-//        //「時間」のラベルを追加
-//        let hStr = UILabel()
-//        hStr.text = "時間"
-//        hStr.sizeToFit()//ぴったりのサイズにするプロパティ
-//        hStr.frame = CGRectMake(testPickerView.bounds.width/4 - hStr.bounds.width/2,
-//                                testPickerView.bounds.height/2 - (hStr.bounds.height/2),
-//                                hStr.bounds.width, hStr.bounds.height)
-//        testPickerView.addSubview(hStr)
-        
+
         //「分」のラベルを追加
         let mStr = UILabel()
         mStr.text = "minute"
@@ -278,8 +282,34 @@ class ViewController:UIViewController,UIPickerViewDelegate,UIPickerViewDataSourc
         testPickerView.dataSource = self
         
         testPickerView.selectRow(20, inComponent: 0, animated: false)//最初に表示する行を指定するプロパティ
+        
+        //【Swift】iOSアプリがフォアグラウンドになった時に、ViewControllerで更新処理をするを参照 更新したい内容を追加
+        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.viewWillEnterForeground(_:)), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.viewDidEnterBackground(_:)), name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
+    }
+    
+    //【Swift】iOSアプリがフォアグラウンドになった時に、ViewControllerで更新処理をするを参照 フォアグラウンドに行った時の処理
+    @objc func viewWillEnterForeground(_ notification: Notification?) {
+        if (self.isViewLoaded && (self.view.window != nil)) {
+            print("フォアグラウンド")
+            
+            
+        }
+    }
+    //【Swift】iOSアプリがフォアグラウンドになった時に、ViewControllerで更新処理をするを参照　バックグラウンドに行った時の処理
+    @objc func viewDidEnterBackground(_ notification: Notification?) {
+        if (self.isViewLoaded && (self.view.window != nil)) {
+           
+            if timer.isValid == true {
+                
+                
+                
+            }
+        }
     }
 
+    
+    
     //上で文句言われたからFix コンポーネントの個数を返すメソッド
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return dataList.count

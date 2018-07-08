@@ -20,8 +20,9 @@
 		EE2B64BD20E4C3CD00EA05BC /* 音.png in Resources */ = {isa = PBXBuildFile; fileRef = EE2B64BC20E4C3CD00EA05BC /* 音.png */; };
 		EE2B64BF20E4C3D300EA05BC /* 搖.png in Resources */ = {isa = PBXBuildFile; fileRef = EE2B64BE20E4C3D300EA05BC /* 搖.png */; };
 		EE2B761520ECEDE800137C78 /* utatane-02.png in Resources */ = {isa = PBXBuildFile; fileRef = EE2B761420ECEDE800137C78 /* utatane-02.png */; };
-		EE2B761720ED030800137C78 /* utataneicon.png in Resources */ = {isa = PBXBuildFile; fileRef = EE2B761620ED030700137C78 /* utataneicon.png */; };
-		EE2B761920ED099700137C78 /* utatane.png in Resources */ = {isa = PBXBuildFile; fileRef = EE2B761820ED099700137C78 /* utatane.png */; };
+		EE2B761B20EE1E6B00137C78 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = EE2B761A20EE1E6B00137C78 /* icon.png */; };
+		EE2B761D20EF354800137C78 /* Silent3sec.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = EE2B761C20EF354800137C78 /* Silent3sec.mp3 */; };
+		EE2B761F20EF4E6600137C78 /* birdland1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = EE2B761E20EF4E6600137C78 /* birdland1.mp3 */; };
 		EE2D0A6D20E5FE2E00B0B412 /* Cancel.png in Resources */ = {isa = PBXBuildFile; fileRef = EE2D0A6C20E5FE2E00B0B412 /* Cancel.png */; };
 		EE2D0A6F20E5FEB600B0B412 /* Start.png in Resources */ = {isa = PBXBuildFile; fileRef = EE2D0A6E20E5FEB500B0B412 /* Start.png */; };
 		EE2D0A7320E9AEB000B0B412 /* Stop.png in Resources */ = {isa = PBXBuildFile; fileRef = EE2D0A7220E9AEAF00B0B412 /* Stop.png */; };
@@ -44,8 +45,9 @@
 		EE2B64BC20E4C3CD00EA05BC /* 音.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "音.png"; sourceTree = SOURCE_ROOT; };
 		EE2B64BE20E4C3D300EA05BC /* 搖.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "搖.png"; sourceTree = SOURCE_ROOT; };
 		EE2B761420ECEDE800137C78 /* utatane-02.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "utatane-02.png"; path = "../../utatane-02.png"; sourceTree = "<group>"; };
-		EE2B761620ED030700137C78 /* utataneicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = utataneicon.png; sourceTree = SOURCE_ROOT; };
-		EE2B761820ED099700137C78 /* utatane.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = utatane.png; sourceTree = SOURCE_ROOT; };
+		EE2B761A20EE1E6B00137C78 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = SOURCE_ROOT; };
+		EE2B761C20EF354800137C78 /* Silent3sec.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Silent3sec.mp3; sourceTree = SOURCE_ROOT; };
+		EE2B761E20EF4E6600137C78 /* birdland1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = birdland1.mp3; sourceTree = SOURCE_ROOT; };
 		EE2D0A6C20E5FE2E00B0B412 /* Cancel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Cancel.png; sourceTree = SOURCE_ROOT; };
 		EE2D0A6E20E5FEB500B0B412 /* Start.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Start.png; sourceTree = SOURCE_ROOT; };
 		EE2D0A7220E9AEAF00B0B412 /* Stop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Stop.png; sourceTree = SOURCE_ROOT; };
@@ -96,9 +98,10 @@
 				EE2D0A6C20E5FE2E00B0B412 /* Cancel.png */,
 				EE2B761420ECEDE800137C78 /* utatane-02.png */,
 				EE2D0A7220E9AEAF00B0B412 /* Stop.png */,
-				EE2B761820ED099700137C78 /* utatane.png */,
-				EE2B761620ED030700137C78 /* utataneicon.png */,
 				EE2D0A6E20E5FEB500B0B412 /* Start.png */,
+				EE2B761A20EE1E6B00137C78 /* icon.png */,
+				EE2B761E20EF4E6600137C78 /* birdland1.mp3 */,
+				EE2B761C20EF354800137C78 /* Silent3sec.mp3 */,
 				EE2D0A7420EB5A8C00B0B412 /* song_28_nerine.mp3 */,
 				EE2B645F20DDC1BB00EA05BC /* LaunchScreen.storyboard */,
 				EE2B646220DDC1BB00EA05BC /* Info.plist */,
@@ -169,19 +172,20 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EE2B761B20EE1E6B00137C78 /* icon.png in Resources */,
 				EE2B64BF20E4C3D300EA05BC /* 搖.png in Resources */,
 				EE2B64B920E3602200EA05BC /* Image Set in Resources */,
 				EE2B64BD20E4C3CD00EA05BC /* 音.png in Resources */,
+				EE2B761F20EF4E6600137C78 /* birdland1.mp3 in Resources */,
 				EE2D0A7320E9AEB000B0B412 /* Stop.png in Resources */,
 				EE2D0A6D20E5FE2E00B0B412 /* Cancel.png in Resources */,
 				EE2B761520ECEDE800137C78 /* utatane-02.png in Resources */,
+				EE2B761D20EF354800137C78 /* Silent3sec.mp3 in Resources */,
 				EE2B646120DDC1BB00EA05BC /* LaunchScreen.storyboard in Resources */,
 				EE2B64BB20E4C3C900EA05BC /* 光.png in Resources */,
 				EE2D0A7520EB5A8D00B0B412 /* song_28_nerine.mp3 in Resources */,
 				EE2B645E20DDC1BB00EA05BC /* Assets.xcassets in Resources */,
 				EE2B645C20DDC1BA00EA05BC /* Main.storyboard in Resources */,
-				EE2B761720ED030800137C78 /* utataneicon.png in Resources */,
-				EE2B761920ED099700137C78 /* utatane.png in Resources */,
 				EE2D0A6F20E5FEB600B0B412 /* Start.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

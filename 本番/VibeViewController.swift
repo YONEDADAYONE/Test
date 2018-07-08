@@ -70,9 +70,9 @@ class VibeViewController: UIViewController,UIPickerViewDelegate,UIPickerViewData
             //カウントダウン状況をラベルに表示
             if(count > 0) {
                 testLabel.text = "残り\(count)秒です。"
-            } else {
+            } else if (count == 0) {
                 testLabel.text = "カウントダウン終了"
-                timer.invalidate()
+                
                 //震える
                 Vibe()
             
@@ -86,7 +86,8 @@ class VibeViewController: UIViewController,UIPickerViewDelegate,UIPickerViewData
                     // ボタンが押された時の処理を書く（クロージャ実装）
                     (action: UIAlertAction!) -> Void in
                     //ここに処理を書く
-//                    self. バイブを止める処理　聞く
+                    self.timer.invalidate()
+        
                     self.testLabel.text = "少しお休みしませんか?"
                 })
                 
@@ -135,12 +136,28 @@ class VibeViewController: UIViewController,UIPickerViewDelegate,UIPickerViewData
     
         //震える　ずっと震えさせる方法考える ポケットリファレンスの90%を参照
         func Vibe() {
-            AudioServicesPlayAlertSound(kSystemSoundID_Vibrate)
-//タイマーで繰り返す。
+            timer = Timer.scheduledTimer(
+                timeInterval: 1,
+                target: self,
+                selector: #selector(self.buruburu),
+                userInfo: nil,
+                repeats: true)
+            
     }
     
+    @objc func buruburu() {
+        AudioServicesPlayAlertSound(kSystemSoundID_Vibrate)
+    }
+    
+    
+
+    
     @IBAction func CancelButton(_ sender: UIButton) {
-        timer.invalidate()
+        if timer.isValid == true {
+            //timerを破棄する.
+            timer.invalidate()
+            testLabel.text = "少しお休みしませんか?"
+        }
     }
     
     override func viewDidLoad() {
