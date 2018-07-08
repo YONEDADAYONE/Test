@@ -23,7 +23,7 @@ class ViewController:UIViewController,UIPickerViewDelegate,UIPickerViewDataSourc
     var count:Int = 0
     var gameStartTime:Date = Date()//変化する値を入れるので変数
     var gamePauseTime:Date = Date()//変化する値を入れるので変数
-//    let foregoundDate = Date()
+    //    let foregoundDate = Date()
     let backgroundDate = Int(Date().timeIntervalSince1970)
     let start = NSDate()
     let beforeTime = NSDate()
@@ -77,13 +77,13 @@ class ViewController:UIViewController,UIPickerViewDelegate,UIPickerViewDataSourc
             
             UIScreen.main.brightness = CGFloat(0.1);//0~1 (1=一番明るい)
             
-//            self.itiji()
-//           self.StartButton.setImage(UIImage(named: "Stop"), for: UIControlState())
+            //            self.itiji()
+            //           self.StartButton.setImage(UIImage(named: "Stop"), for: UIControlState())
             
-//            print(self.StartButton.image)
-//            if self.StartButton == UIImage(named: "Stop") {
-//                print("せいこう")
-//            }
+            //            print(self.StartButton.image)
+            //            if self.StartButton == UIImage(named: "Stop") {
+            //                print("せいこう")
+            //            }
         })
         
         
@@ -93,7 +93,7 @@ class ViewController:UIViewController,UIPickerViewDelegate,UIPickerViewDataSourc
             // ボタンが押された時の処理を書く（クロージャ実装）
             (action: UIAlertAction!) -> Void in
         })
-
+        
         // ③ UIAlertControllerにActionを追加
         alert.addAction(cancelAction)
         alert.addAction(defaultAction)
@@ -105,7 +105,7 @@ class ViewController:UIViewController,UIPickerViewDelegate,UIPickerViewDataSourc
     
     //光タイマーから呼び出されるメソッド(関数)
     @objc func countDown(){
-
+        
         //カウントを減らす。
         count -= 1
         
@@ -118,31 +118,31 @@ class ViewController:UIViewController,UIPickerViewDelegate,UIPickerViewDataSourc
             //光らせる
             Hikari()
         }
-
+        
     }
     
-//    @objc func countDown(){
-//
-//                //カウントを減らす。
-//                count -= 1
-//
-//                //カウントダウン状況をラベルに表示
-//                if(count >= 60) {
-//                    let minuteCount = count / 60
-//                    testLabel.text = String(minuteCount)
-//                    testLabel.text = "残り\(minuteCount)分\(count)秒です。"
-//                } else if count < 60{
-//                    testLabel.text = String(count)
-//                    testLabel.text = "残り\(count)秒です。"
-//        } else
-//        {
-//                    testLabel.text = "カウントダウン終了"
-//                    timer.invalidate()
-//                    //光らせる
-//                Hikari()
-//                }
-//
-//            }
+    //    @objc func countDown(){
+    //
+    //                //カウントを減らす。
+    //                count -= 1
+    //
+    //                //カウントダウン状況をラベルに表示
+    //                if(count >= 60) {
+    //                    let minuteCount = count / 60
+    //                    testLabel.text = String(minuteCount)
+    //                    testLabel.text = "残り\(minuteCount)分\(count)秒です。"
+    //                } else if count < 60{
+    //                    testLabel.text = String(count)
+    //                    testLabel.text = "残り\(count)秒です。"
+    //        } else
+    //        {
+    //                    testLabel.text = "カウントダウン終了"
+    //                    timer.invalidate()
+    //                    //光らせる
+    //                Hikari()
+    //                }
+    //
+    //            }
     
     //自作関数だよ! 一回保留
     func setNotificationAftrer(second:Int) {
@@ -153,7 +153,7 @@ class ViewController:UIViewController,UIPickerViewDelegate,UIPickerViewDataSourc
         content.title = "お知らせします"
         content.body = "指定した時刻になりました"
         
-//        //音設定
+        //        //音設定
         content.sound = UNNotificationSound.init(named: "Silent3sec.mp3")
         
         //バックグラウンドだよ
@@ -194,11 +194,11 @@ class ViewController:UIViewController,UIPickerViewDelegate,UIPickerViewDataSourc
             print(error)
         }
         device?.torchMode = AVCaptureDevice.TorchMode.on
-//        do {
-//            try device?.lockForConfiguration()
-//        } catch {
-//            print(error)
-//        }
+        //        do {
+        //            try device?.lockForConfiguration()
+        //        } catch {
+        //            print(error)
+        //        }
     }
     
     
@@ -214,38 +214,38 @@ class ViewController:UIViewController,UIPickerViewDelegate,UIPickerViewDataSourc
         
     }
     
-//    //一時停止　再開　メソッド
-//    func itiji() {
-//
-//        if timer.isValid == true {
-////        //一時停止
-//        self.gameStartTime = Date()
-//        self.gamePauseTime(false)//タイマーを削除
-//        self.StartButton.setImage(UIImage(named: "Stop"), for: UIControlState())
-//
-//        }else {
-//            //再開
-//            //timerを生成する.
-//            timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector:#selector(self.countDown), userInfo: nil, repeats: true)
-//
-//            self.StartButton.setImage(UIImage(named: "Start"), for: UIControlState())
-//        }
-//
-//    }
+    //    //一時停止　再開　メソッド
+    //    func itiji() {
+    //
+    //        if timer.isValid == true {
+    ////        //一時停止
+    //        self.gameStartTime = Date()
+    //        self.gamePauseTime(false)//タイマーを削除
+    //        self.StartButton.setImage(UIImage(named: "Stop"), for: UIControlState())
+    //
+    //        }else {
+    //            //再開
+    //            //timerを生成する.
+    //            timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector:#selector(self.countDown), userInfo: nil, repeats: true)
+    //
+    //            self.StartButton.setImage(UIImage(named: "Start"), for: UIControlState())
+    //        }
+    //
+    //    }
     
-//    // タイマーを止めたり動かしたりするメソッド
-//    func timerStopStart(setFlg: Bool){
-//        if setFlg || self.timer == nil {
-//            // 一時停止時間から、最初の時間を引いて、その分をタイマーセット時間から引く
-//            let defTime = self.gamePauseTime.timeIntervalSince1970 - self.gameStartTime.timeIntervalSince1970
-//            // タイマーを入れなおす
-//            self.gameClearTimer = Timer.scheduledTimer(timeInterval: 60 - defTime, target: self, selector: #selector(ViewController.clearFunc), userInfo: nil, repeats: false);
-//        } else {
-//            self.timer.invalidate();
-//        }
-//    }
+    //    // タイマーを止めたり動かしたりするメソッド
+    //    func timerStopStart(setFlg: Bool){
+    //        if setFlg || self.timer == nil {
+    //            // 一時停止時間から、最初の時間を引いて、その分をタイマーセット時間から引く
+    //            let defTime = self.gamePauseTime.timeIntervalSince1970 - self.gameStartTime.timeIntervalSince1970
+    //            // タイマーを入れなおす
+    //            self.gameClearTimer = Timer.scheduledTimer(timeInterval: 60 - defTime, target: self, selector: #selector(ViewController.clearFunc), userInfo: nil, repeats: false);
+    //        } else {
+    //            self.timer.invalidate();
+    //        }
+    //    }
     
-
+    
     
     
     
@@ -256,7 +256,7 @@ class ViewController:UIViewController,UIPickerViewDelegate,UIPickerViewDataSourc
         // Do any additional setup after loading the view, typically from a nib.
         
         self.view.backgroundColor = UIColor.init(red: 234/255, green: 255/255, blue: 255/255, alpha: 1) //背景
-
+        
         //「分」のラベルを追加
         let mStr = UILabel()
         mStr.text = "minute"
@@ -299,7 +299,7 @@ class ViewController:UIViewController,UIPickerViewDelegate,UIPickerViewDataSourc
     //【Swift】iOSアプリがフォアグラウンドになった時に、ViewControllerで更新処理をするを参照　バックグラウンドに行った時の処理
     @objc func viewDidEnterBackground(_ notification: Notification?) {
         if (self.isViewLoaded && (self.view.window != nil)) {
-           
+            
             if timer.isValid == true {
                 
                 
@@ -307,7 +307,7 @@ class ViewController:UIViewController,UIPickerViewDelegate,UIPickerViewDataSourc
             }
         }
     }
-
+    
     
     
     //上で文句言われたからFix コンポーネントの個数を返すメソッド
@@ -338,25 +338,25 @@ class ViewController:UIViewController,UIPickerViewDelegate,UIPickerViewDataSourc
     //コロコロがとまったときに処理される。
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         
-//        print(dataList[0][0])
-//        print(self.testPickerView.selectedRow(inComponent: 0))
+        //        print(dataList[0][0])
+        //        print(self.testPickerView.selectedRow(inComponent: 0))
         if self.testPickerView.selectedRow(inComponent: 0) == 0 && self.testPickerView.selectedRow(inComponent: 1) == 0 {
             StartButton.isEnabled = false
         } else {
             StartButton.isEnabled = true
         }
-//        if dataList[0] == [0] {
-//            print(dataList[0])
-//        }
+        //        if dataList[0] == [0] {
+        //            print(dataList[0])
+        //        }
     }
     
     
-
+    
     
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
 }
