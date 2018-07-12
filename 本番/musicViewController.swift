@@ -250,7 +250,7 @@ class musicViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDat
         let mStr = UILabel()
         mStr.text = "minute"
         mStr.sizeToFit()
-        mStr.frame = CGRectMake(testPickerView.bounds.width/2.41 - mStr.bounds.width/2,
+        mStr.frame = CGRectMake(testPickerView.bounds.width/2.45 - mStr.bounds.width/2,
                                 testPickerView.bounds.height/2 - (mStr.bounds.height/2),
                                 mStr.bounds.width, mStr.bounds.height)
         testPickerView.addSubview(mStr)
@@ -260,7 +260,7 @@ class musicViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDat
         let sStr = UILabel()
         sStr.text = "second"
         sStr.sizeToFit()
-        sStr.frame = CGRectMake(testPickerView.bounds.width/1.48 - sStr.bounds.width/2,
+        sStr.frame = CGRectMake(testPickerView.bounds.width/1.5 - sStr.bounds.width/2,
                                 testPickerView.bounds.height/2 - (sStr.bounds.height/2),
                                 sStr.bounds.width, sStr.bounds.height)
         testPickerView.addSubview(sStr)

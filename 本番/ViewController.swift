@@ -25,11 +25,11 @@ class ViewController:UIViewController,UIPickerViewDelegate,UIPickerViewDataSourc
     var gamePauseTime:Date = Date()//変化する値を入れるので変数
     //    let foregoundDate = Date()
     let backgroundDate = Int(Date().timeIntervalSince1970)
+    let foregroundDate = Int(Date().timeIntervalSince1970)
     let start = NSDate()
-    let beforeTime = NSDate()
+    var beforeTime:Date = Date()
     let currentTime = NSDate()
-    
-    
+    var appDelegate:AppDelegate = UIApplication.shared.delegate as! AppDelegate //AppDelegateのインスタンスを取得
     
     //時分秒のデータ
     var dataList = [ [Int](0...59), [Int](0...59)]
@@ -55,7 +55,8 @@ class ViewController:UIViewController,UIPickerViewDelegate,UIPickerViewDataSourc
     
     //ライトボタンタップされたら発動.
     @IBAction func setTimerNotification(_ sender: UIButton) {
-        
+    
+        appDelegate.message = 0
         
         let alert = UIAlertController(
             title: "アプリは起動状態のままでお願いします。", message: "よろしいですか?", preferredStyle: UIAlertControllerStyle.alert)
@@ -84,6 +85,7 @@ class ViewController:UIViewController,UIPickerViewDelegate,UIPickerViewDataSourc
             //            if self.StartButton == UIImage(named: "Stop") {
             //                print("せいこう")
             //            }
+
         })
         
         
@@ -105,14 +107,26 @@ class ViewController:UIViewController,UIPickerViewDelegate,UIPickerViewDataSourc
     
     //光タイマーから呼び出されるメソッド(関数)
     @objc func countDown(){
+
+        let message = appDelegate.message
+        var mainasu: Int = Int(message!)
+        var keisan = count + mainasu
+        
         
         //カウントを減らす。
         count -= 1
         
         //カウントダウン状況をラベルに表示
-        if(count > 0) {
-            testLabel.text = "残り\(count)秒です。"//ここをいじるはず分ラベルと秒ラベルで操作?
-        } else {
+        if(keisan > 0) {
+            testLabel.text = "残り\(keisan)秒です。"//ここをいじるはず分ラベルと秒ラベルで操作?
+//            print(count,message,keisan)
+//        } else if (keisan < 0) {
+//            appDelegate.message = 0
+//            testLabel.text = "あああ"
+//            timer.invalidate()
+//            Hikari()
+//}
+        }else {
             testLabel.text = "カウントダウン終了"
             timer.invalidate()
             //光らせる
@@ -158,7 +172,7 @@ class ViewController:UIViewController,UIPickerViewDelegate,UIPickerViewDataSourc
         
         //バックグラウンドだよ
         
-        for i in 1...15 {
+        for i in 1...9 {
             //トリガー設定
             let trigger = UNTimeIntervalNotificationTrigger.init(timeInterval: TimeInterval(second + i), repeats: false)
             
@@ -167,26 +181,36 @@ class ViewController:UIViewController,UIPickerViewDelegate,UIPickerViewDataSourc
             
             //通知のセット
             UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
-            
-            //[iOS8以降]Push通知の実装とテスト(swift)を参考
-            func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
-                switch application.applicationState {
-                case .active:
-                    timer.invalidate()
-                    break
-                case .inactive:
-                    timer.invalidate()
-                    break
-                case .background:
-                    timer.invalidate()
-                    break
-                }
-            }
         }
     }
     
+    
     //光らせる
     func Hikari() {
+        
+        //アラート表示
+        let alert = UIAlertController(
+            title: "アラームを止めますか?", message: "", preferredStyle: UIAlertControllerStyle.alert)
+        
+        
+        
+        let defaultAction = UIAlertAction(title: "OK", style: .default, handler:{
+            // ボタンが押された時の処理を書く（クロージャ実装）
+            (action: UIAlertAction!) -> Void in
+            //ここに処理を書く
+            self.timer.invalidate()
+            let device = AVCaptureDevice.default(for: AVMediaType.video)
+            device?.torchMode = AVCaptureDevice.TorchMode.off
+            self.testLabel.text = "少しお休みしませんか?"
+        })
+        
+        //
+        alert.addAction(defaultAction)
+        
+        //
+        present(alert,animated: true,completion: nil)
+        
+        
         let device = AVCaptureDevice.default(for: AVMediaType.video)
         do {
             try device?.lockForConfiguration()
@@ -261,7 +285,7 @@ class ViewController:UIViewController,UIPickerViewDelegate,UIPickerViewDataSourc
         let mStr = UILabel()
         mStr.text = "minute"
         mStr.sizeToFit()
-        mStr.frame = CGRectMake(testPickerView.bounds.width/2.41 - mStr.bounds.width/2,
+        mStr.frame = CGRectMake(testPickerView.bounds.width/2.45 - mStr.bounds.width/2,
                                 testPickerView.bounds.height/2 - (mStr.bounds.height/2),
                                 mStr.bounds.width, mStr.bounds.height)
         testPickerView.addSubview(mStr)
@@ -271,7 +295,7 @@ class ViewController:UIViewController,UIPickerViewDelegate,UIPickerViewDataSourc
         let sStr = UILabel()
         sStr.text = "second"
         sStr.sizeToFit()
-        sStr.frame = CGRectMake(testPickerView.bounds.width/1.48 - sStr.bounds.width/2,
+        sStr.frame = CGRectMake(testPickerView.bounds.width/1.5 - sStr.bounds.width/2,
                                 testPickerView.bounds.height/2 - (sStr.bounds.height/2),
                                 sStr.bounds.width, sStr.bounds.height)
         testPickerView.addSubview(sStr)
@@ -283,31 +307,7 @@ class ViewController:UIViewController,UIPickerViewDelegate,UIPickerViewDataSourc
         
         testPickerView.selectRow(20, inComponent: 0, animated: false)//最初に表示する行を指定するプロパティ
         
-        //【Swift】iOSアプリがフォアグラウンドになった時に、ViewControllerで更新処理をするを参照 更新したい内容を追加
-        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.viewWillEnterForeground(_:)), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.viewDidEnterBackground(_:)), name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
     }
-    
-    //【Swift】iOSアプリがフォアグラウンドになった時に、ViewControllerで更新処理をするを参照 フォアグラウンドに行った時の処理
-    @objc func viewWillEnterForeground(_ notification: Notification?) {
-        if (self.isViewLoaded && (self.view.window != nil)) {
-            print("フォアグラウンド")
-            
-            
-        }
-    }
-    //【Swift】iOSアプリがフォアグラウンドになった時に、ViewControllerで更新処理をするを参照　バックグラウンドに行った時の処理
-    @objc func viewDidEnterBackground(_ notification: Notification?) {
-        if (self.isViewLoaded && (self.view.window != nil)) {
-            
-            if timer.isValid == true {
-                
-                
-                
-            }
-        }
-    }
-    
     
     
     //上で文句言われたからFix コンポーネントの個数を返すメソッド

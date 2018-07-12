@@ -66,7 +66,9 @@ class VibeViewController: UIViewController,UIPickerViewDelegate,UIPickerViewData
     
             //カウントを減らす。
             count -= 1
-    
+ 
+            print(count)
+            
             //カウントダウン状況をラベルに表示
             if(count > 0) {
                 testLabel.text = "残り\(count)秒です。"
@@ -86,8 +88,8 @@ class VibeViewController: UIViewController,UIPickerViewDelegate,UIPickerViewData
                     // ボタンが押された時の処理を書く（クロージャ実装）
                     (action: UIAlertAction!) -> Void in
                     //ここに処理を書く
+                    
                     self.timer.invalidate()
-        
                     self.testLabel.text = "少しお休みしませんか?"
                 })
                 
@@ -96,6 +98,7 @@ class VibeViewController: UIViewController,UIPickerViewDelegate,UIPickerViewData
                 
                 //
                 present(alert,animated: true,completion: nil)
+            
             }
     
         }
@@ -136,6 +139,8 @@ class VibeViewController: UIViewController,UIPickerViewDelegate,UIPickerViewData
     
         //震える　ずっと震えさせる方法考える ポケットリファレンスの90%を参照
         func Vibe() {
+            self.timer.invalidate()
+
             timer = Timer.scheduledTimer(
                 timeInterval: 1,
                 target: self,
@@ -180,7 +185,7 @@ class VibeViewController: UIViewController,UIPickerViewDelegate,UIPickerViewData
         let mStr = UILabel()
         mStr.text = "minute"
         mStr.sizeToFit()
-        mStr.frame = CGRectMake(testPickerView.bounds.width/2.41 - mStr.bounds.width/2,
+        mStr.frame = CGRectMake(testPickerView.bounds.width/2.45 - mStr.bounds.width/2,
                                 testPickerView.bounds.height/2 - (mStr.bounds.height/2),
                                 mStr.bounds.width, mStr.bounds.height)
         testPickerView.addSubview(mStr)
@@ -190,7 +195,7 @@ class VibeViewController: UIViewController,UIPickerViewDelegate,UIPickerViewData
         let sStr = UILabel()
         sStr.text = "second"
         sStr.sizeToFit()
-        sStr.frame = CGRectMake(testPickerView.bounds.width/1.48 - sStr.bounds.width/2,
+        sStr.frame = CGRectMake(testPickerView.bounds.width/1.5 - sStr.bounds.width/2,
                                 testPickerView.bounds.height/2 - (sStr.bounds.height/2),
                                 sStr.bounds.width, sStr.bounds.height)
         testPickerView.addSubview(sStr)

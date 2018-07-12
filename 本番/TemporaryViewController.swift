@@ -8,8 +8,16 @@
 
 import UIKit
 
+var appDelegate:AppDelegate = UIApplication.shared.delegate as! AppDelegate //AppDelegateのインスタンスを取得
+
+
+
 class TemporaryViewController: UIViewController {
 
+    func vessele() {
+       appDelegate.message = 0 //appDelegateの変数を操作
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 

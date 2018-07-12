@@ -86,9 +86,9 @@
 			children = (
 				EE2B645620DDC1BA00EA05BC /* AppDelegate.swift */,
 				EE2B645820DDC1BA00EA05BC /* ViewController.swift */,
-				EE2B64B020E30FA000EA05BC /* VibeViewController.swift */,
 				EE2B645A20DDC1BA00EA05BC /* Main.storyboard */,
 				EE2B64AE20E30F4C00EA05BC /* musicViewController.swift */,
+				EE2B64B020E30FA000EA05BC /* VibeViewController.swift */,
 				EE2B648C20E1984300EA05BC /* tableViewController.swift */,
 				EE2B645D20DDC1BB00EA05BC /* Assets.xcassets */,
 				EE2B64B820E3602200EA05BC /* Image Set */,
