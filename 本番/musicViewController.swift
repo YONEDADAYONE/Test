@@ -22,6 +22,7 @@ class musicViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDat
     var count:Int = 0
     var audioPlayer:AVAudioPlayer!
     var player: AVAudioPlayer?
+     var appDelegate:AppDelegate = UIApplication.shared.delegate as! AppDelegate //AppDelegateのインスタンスを取得
     
     //時分秒のデータ
     let dataList = [ [Int](0...59), [Int](0...59)]
@@ -45,8 +46,10 @@ class musicViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDat
         return CGRect(x: x, y: y, width: width, height: height)
     }
     
-    //ライトボタンタップされたら発動.
+    //音楽ボタンタップされたら発動.
     @IBAction func setTimerNotification(_ sender: UIButton) {
+        
+        appDelegate.message = 0
         
         //すでに動いているタイマーは停止する。
         timer.invalidate()
@@ -64,16 +67,20 @@ class musicViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDat
     //光タイマーから呼び出されるメソッド(関数)
     @objc func countDown(){
         
+        let message = appDelegate.message
+        var mainasu: Int = Int(message!)
+        var keisan = count + mainasu
+        
         //カウントを減らす。
         count -= 1
         
         //カウントダウン状況をラベルに表示
-        if(count > 0) {
-            testLabel.text = "残り\(count)秒です。"
+        if(keisan > 0) {
+            testLabel.text = "残り\(keisan)秒です。"
         } else {
-            testLabel.text = "カウントダウン終了"
+            testLabel.text = "指定した時間になりました。"
             timer.invalidate()
-            //光らせる
+            //鳴らす
             ongaku()
             audioPlayer.numberOfLoops = -1
             //アラート表示
@@ -85,6 +92,7 @@ class musicViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDat
                 // ボタンが押された時の処理を書く（クロージャ実装）
                 (action: UIAlertAction!) -> Void in
                 //ここに処理を書く
+                UNUserNotificationCenter.current().removeAllPendingNotificationRequests()//通知全削除
                 self.audioPlayer.stop()
                 self.testLabel.text = "少しお休みしませんか?"
             })
@@ -138,25 +146,16 @@ class musicViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDat
         // Notification のインスタンスを作成
         let content = UNMutableNotificationContent()
         
+        
         //通知のタイトル本文の設定
-        content.title = "指定した時間になりました。"
-        content.body = "起きましょう!"
+        content.title = "お知らせします"
+        content.body = "指定した時刻になりました"
         
-        //音設定
-        content.sound = UNNotificationSound(named: "birdland1.mp3")
-        
-//        //トリガー設定
-//        let trigger = UNTimeIntervalNotificationTrigger.init(timeInterval: TimeInterval(second), repeats: false)
-//        
-//        //リクエスト
-//        let request = UNNotificationRequest.init(identifier: "ID_AfterSecOnceMusic", content: content, trigger: trigger)
-//        
-//        //通知のセット
-//        UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
-        
+        //        //音設定
+        content.sound = UNNotificationSound.init(named: "Yobidasi1.mp3")
         
         //バックグラウンドだよ
-        //for i in stride(from: 開始位置, to: 終了位置, by: 間隔)
+        
         for i in stride(from: 1, to: 50, by: 5) {
             //トリガー設定
             let trigger = UNTimeIntervalNotificationTrigger.init(timeInterval: TimeInterval(second + i), repeats: false)
@@ -167,23 +166,9 @@ class musicViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDat
             //通知のセット
             UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
             
-            //[iOS8以降]Push通知の実装とテスト(swift)を参考
-            func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
-                switch application.applicationState {
-                case .active:
-                    timer.invalidate()
-                    break
-                case .inactive:
-                    timer.invalidate()
-                    break
-                case .background:
-                    timer.invalidate()
-                    break
-                }
-            }
         }
+        
     }
-    
     //鳴らす
     func ongaku() {
         if (audioPlayer.isPlaying) {
@@ -216,7 +201,7 @@ class musicViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDat
         self.view.backgroundColor = UIColor.init(red: 234/255, green: 255/255, blue: 255/255, alpha: 1)
         
         //再生する　audio ファイルのパスを作成
-        let audioPath = Bundle.main.path(forResource: "birdland1", ofType: "mp3")!
+        let audioPath = Bundle.main.path(forResource: "Yobidasi1", ofType: "mp3")!
         let audioUrl = URL(fileURLWithPath: audioPath)
         
         //audio を再生するプレイヤーを作成する

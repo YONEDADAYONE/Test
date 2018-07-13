@@ -19,7 +19,7 @@ class VibeViewController: UIViewController,UIPickerViewDelegate,UIPickerViewData
     
     var timer:Timer = Timer()
     var count:Int = 0
-    
+    var appDelegate:AppDelegate = UIApplication.shared.delegate as! AppDelegate //AppDelegateのインスタンスを取得
     
     //時分秒のデータ
     let dataList = [ [Int](0...59), [Int](0...59)]
@@ -48,6 +48,8 @@ class VibeViewController: UIViewController,UIPickerViewDelegate,UIPickerViewData
         //バイブボタンがタップされたら
         @IBAction func VibesetTimerNotification(_ sender: UIButton) {
     
+            appDelegate.message = 0
+            
             //すでに動いているタイマーは停止する。
             timer.invalidate()
             //カウントダウンする秒数を取得する。
@@ -64,16 +66,18 @@ class VibeViewController: UIViewController,UIPickerViewDelegate,UIPickerViewData
         //タイマーから呼び出されるメソッド(関数)
         @objc func countDownV(){
     
+            let message = appDelegate.message
+            var mainasu: Int = Int(message!)
+            var keisan = count + mainasu
+            
             //カウントを減らす。
             count -= 1
  
-            print(count)
-            
             //カウントダウン状況をラベルに表示
-            if(count > 0) {
-                testLabel.text = "残り\(count)秒です。"
-            } else if (count == 0) {
-                testLabel.text = "カウントダウン終了"
+            if(keisan > 0) {
+                testLabel.text = "残り\(keisan)秒です。"
+            } else {
+                testLabel.text = "指定した時間になりました。"
                 
                 //震える
                 Vibe()
@@ -88,7 +92,7 @@ class VibeViewController: UIViewController,UIPickerViewDelegate,UIPickerViewData
                     // ボタンが押された時の処理を書く（クロージャ実装）
                     (action: UIAlertAction!) -> Void in
                     //ここに処理を書く
-                    
+                     UNUserNotificationCenter.current().removeAllPendingNotificationRequests()//通知全削除
                     self.timer.invalidate()
                     self.testLabel.text = "少しお休みしませんか?"
                 })
@@ -108,26 +112,27 @@ class VibeViewController: UIViewController,UIPickerViewDelegate,UIPickerViewData
         // Notification のインスタンスを作成
         let content = UNMutableNotificationContent()
         
+        
         //通知のタイトル本文の設定
-        content.title = "通知のタイトルだよ"
-        content.body = "おはよう"
+        content.title = "お知らせします"
+        content.body = "指定した時刻になりました"
         
-        //音設定
-        content.sound = UNNotificationSound.default()
+        //        //音設定
+        content.sound = UNNotificationSound.init(named: "Silent3sec.mp3")
         
-        //トリガー設定
-        let trigger = UNTimeIntervalNotificationTrigger.init(timeInterval: TimeInterval(second), repeats: false)
+        //バックグラウンドだよ
         
-        //リクエスト
-        let request = UNNotificationRequest.init(identifier: "ID_AfterSecOnce", content: content, trigger: trigger)
-        
-        //通知のセット
-        UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
-        
-//        for (int i = 0; i <= 6; i++) {
-//            NSDate *fireDate = [basedFireDate dateByAddingMinutes:i * 15];
-//            [self makeNotification:fireDate a
-//        }
+        for i in stride(from: 1, to: 50, by: 5) {
+            //トリガー設定
+            let trigger = UNTimeIntervalNotificationTrigger.init(timeInterval: TimeInterval(second + i), repeats: false)
+            
+            //リクエスト 復習
+            let request = UNNotificationRequest.init(identifier: "ID_AfterSecOnce\(i)", content: content, trigger: trigger)
+            
+            //通知のセット
+            UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
+            
+        }
         
     }
     

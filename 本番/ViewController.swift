@@ -30,7 +30,8 @@ class ViewController:UIViewController,UIPickerViewDelegate,UIPickerViewDataSourc
     var beforeTime:Date = Date()
     let currentTime = NSDate()
     var appDelegate:AppDelegate = UIApplication.shared.delegate as! AppDelegate //AppDelegateのインスタンスを取得
-    
+    let mStr = UILabel()
+    let sStr = UILabel()
     //時分秒のデータ
     var dataList = [ [Int](0...59), [Int](0...59)]
     
@@ -45,6 +46,7 @@ class ViewController:UIViewController,UIPickerViewDelegate,UIPickerViewDataSourc
         default:
             return 30
         }
+        
     }
     //Swift3にアップデートしたらCGRectMakeが使えず、'CGRectMake' is unavailable in Swiftとエラーが出るようになった。を参照
     //CGRectMakeを使える様に関数を付け加える
@@ -59,7 +61,7 @@ class ViewController:UIViewController,UIPickerViewDelegate,UIPickerViewDataSourc
         appDelegate.message = 0
         
         let alert = UIAlertController(
-            title: "アプリは起動状態のままでお願いします。", message: "よろしいですか?", preferredStyle: UIAlertControllerStyle.alert)
+            title: "ライト機能を使用するためアプリは起動状態のままでお願いします。", message: "よろしいですか?", preferredStyle: UIAlertControllerStyle.alert)
         
         let defaultAction: UIAlertAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler:{
             // ボタンが押された時の処理を書く（クロージャ実装）
@@ -127,7 +129,7 @@ class ViewController:UIViewController,UIPickerViewDelegate,UIPickerViewDataSourc
 //            Hikari()
 //}
         }else {
-            testLabel.text = "カウントダウン終了"
+            testLabel.text = "指定した時間になりました。"
             timer.invalidate()
             //光らせる
             Hikari()
@@ -163,6 +165,7 @@ class ViewController:UIViewController,UIPickerViewDelegate,UIPickerViewDataSourc
         // Notification のインスタンスを作成
         let content = UNMutableNotificationContent()
         
+        
         //通知のタイトル本文の設定
         content.title = "お知らせします"
         content.body = "指定した時刻になりました"
@@ -172,7 +175,7 @@ class ViewController:UIViewController,UIPickerViewDelegate,UIPickerViewDataSourc
         
         //バックグラウンドだよ
         
-        for i in 1...9 {
+        for i in stride(from: 1, to: 50, by: 5) {
             //トリガー設定
             let trigger = UNTimeIntervalNotificationTrigger.init(timeInterval: TimeInterval(second + i), repeats: false)
             
@@ -181,7 +184,10 @@ class ViewController:UIViewController,UIPickerViewDelegate,UIPickerViewDataSourc
             
             //通知のセット
             UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
+            
         }
+        
+    
     }
     
     
@@ -202,6 +208,7 @@ class ViewController:UIViewController,UIPickerViewDelegate,UIPickerViewDataSourc
             let device = AVCaptureDevice.default(for: AVMediaType.video)
             device?.torchMode = AVCaptureDevice.TorchMode.off
             self.testLabel.text = "少しお休みしませんか?"
+        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()//通知全削除
         })
         
         //
@@ -279,25 +286,22 @@ class ViewController:UIViewController,UIPickerViewDelegate,UIPickerViewDataSourc
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        self.view.backgroundColor = UIColor.init(red: 234/255, green: 255/255, blue: 255/255, alpha: 1) //背景
-        
+        //背景
+        self.view.backgroundColor = UIColor.init(red: 234/255, green: 255/255, blue: 255/255, alpha: 1)
+
         //「分」のラベルを追加
-        let mStr = UILabel()
+        
         mStr.text = "minute"
         mStr.sizeToFit()
-        mStr.frame = CGRectMake(testPickerView.bounds.width/2.45 - mStr.bounds.width/2,
-                                testPickerView.bounds.height/2 - (mStr.bounds.height/2),
-                                mStr.bounds.width, mStr.bounds.height)
+
         testPickerView.addSubview(mStr)
         
         
         //「秒」のラベルを追加
-        let sStr = UILabel()
+        
         sStr.text = "second"
         sStr.sizeToFit()
-        sStr.frame = CGRectMake(testPickerView.bounds.width/1.5 - sStr.bounds.width/2,
-                                testPickerView.bounds.height/2 - (sStr.bounds.height/2),
-                                sStr.bounds.width, sStr.bounds.height)
+
         testPickerView.addSubview(sStr)
         
         print(dataList[0].count)
@@ -306,7 +310,7 @@ class ViewController:UIViewController,UIPickerViewDelegate,UIPickerViewDataSourc
         testPickerView.dataSource = self
         
         testPickerView.selectRow(20, inComponent: 0, animated: false)//最初に表示する行を指定するプロパティ
-        
+
     }
     
     
@@ -323,6 +327,7 @@ class ViewController:UIViewController,UIPickerViewDelegate,UIPickerViewDataSourc
     
     //サイズを返すメソッド
     func pickerView(_ pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
+        print(#function)
         return testPickerView.bounds.width * 1/4
     }
     
@@ -350,8 +355,19 @@ class ViewController:UIViewController,UIPickerViewDelegate,UIPickerViewDataSourc
         //        }
     }
     
-    
-    
+    override func viewWillAppear(_ animated: Bool) {
+        print(#function)
+
+        mStr.frame = CGRectMake(testPickerView.bounds.width/2 - 56,
+                                testPickerView.bounds.height/2 - (mStr.bounds.height/2),
+                                mStr.bounds.width, mStr.bounds.height)
+        
+        //「秒」のラベルを追加
+        
+        sStr.frame = CGRectMake(testPickerView.bounds.width * 3 / 4 - sStr.bounds.width,
+                                testPickerView.bounds.height/2 - (sStr.bounds.height/2),
+                                sStr.bounds.width, sStr.bounds.height)
+    }
     
     
     override func didReceiveMemoryWarning() {

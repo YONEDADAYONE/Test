@@ -85,17 +85,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
     }
         
-    //[iOS8以降]Push通知の実装とテスト(swift)を参考
-    func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
-        switch application.applicationState {
-        case .active:
-            break
-        case .inactive:
-            break
-        case .background:
-            break
-        }
-    }
+//    //[iOS8以降]Push通知の実装とテスト(swift)を参考
+//    func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
+//        switch application.applicationState {
+//        case .active:
+//            break
+//        case .inactive:
+//            break
+//        case .background:
+//            break
+//        }
+//    }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
@@ -105,7 +105,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
+    
+        
+    }
+
+    
 
 
 
-}
