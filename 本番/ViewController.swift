@@ -129,7 +129,7 @@ class ViewController:UIViewController,UIPickerViewDelegate,UIPickerViewDataSourc
 //            Hikari()
 //}
         }else {
-            testLabel.text = "指定した時間になりました。"
+            testLabel.text = "おはようございます!"
             timer.invalidate()
             //光らせる
             Hikari()
@@ -355,9 +355,9 @@ class ViewController:UIViewController,UIPickerViewDelegate,UIPickerViewDataSourc
         //        }
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        print(#function)
-
+    override func viewDidLayoutSubviews() {
+        print(#function,testPickerView.frame.width)
+        super.viewDidLayoutSubviews()
         mStr.frame = CGRectMake(testPickerView.bounds.width/2 - 56,
                                 testPickerView.bounds.height/2 - (mStr.bounds.height/2),
                                 mStr.bounds.width, mStr.bounds.height)
@@ -367,6 +367,20 @@ class ViewController:UIViewController,UIPickerViewDelegate,UIPickerViewDataSourc
         sStr.frame = CGRectMake(testPickerView.bounds.width * 3 / 4 - sStr.bounds.width,
                                 testPickerView.bounds.height/2 - (sStr.bounds.height/2),
                                 sStr.bounds.width, sStr.bounds.height)
+        
+    }
+    override func viewWillAppear(_ animated: Bool) {
+//        print(#function,testPickerView.frame.width)
+        
+                mStr.frame = CGRectMake(testPickerView.bounds.width/2 - 56,
+                                        testPickerView.bounds.height/2 - (mStr.bounds.height/2),
+                                        mStr.bounds.width, mStr.bounds.height)
+        
+                //「秒」のラベルを追加
+        
+                sStr.frame = CGRectMake(testPickerView.bounds.width * 3 / 4 - sStr.bounds.width,
+                                        testPickerView.bounds.height/2 - (sStr.bounds.height/2),
+                                        sStr.bounds.width, sStr.bounds.height)
     }
     
     

@@ -20,6 +20,8 @@ class VibeViewController: UIViewController,UIPickerViewDelegate,UIPickerViewData
     var timer:Timer = Timer()
     var count:Int = 0
     var appDelegate:AppDelegate = UIApplication.shared.delegate as! AppDelegate //AppDelegateのインスタンスを取得
+    let sStr = UILabel()
+    let mStr = UILabel()
     
     //時分秒のデータ
     let dataList = [ [Int](0...59), [Int](0...59)]
@@ -77,7 +79,7 @@ class VibeViewController: UIViewController,UIPickerViewDelegate,UIPickerViewData
             if(keisan > 0) {
                 testLabel.text = "残り\(keisan)秒です。"
             } else {
-                testLabel.text = "指定した時間になりました。"
+                testLabel.text = "おはようございます!"
                 
                 //震える
                 Vibe()
@@ -187,7 +189,7 @@ class VibeViewController: UIViewController,UIPickerViewDelegate,UIPickerViewData
 //        testPickerView.addSubview(hStr)
         
         //「分」のラベルを追加
-        let mStr = UILabel()
+        
         mStr.text = "minute"
         mStr.sizeToFit()
         mStr.frame = CGRectMake(testPickerView.bounds.width/2.45 - mStr.bounds.width/2,
@@ -197,7 +199,6 @@ class VibeViewController: UIViewController,UIPickerViewDelegate,UIPickerViewData
         print(mStr)
         
         //「秒」のラベルを追加
-        let sStr = UILabel()
         sStr.text = "second"
         sStr.sizeToFit()
         sStr.frame = CGRectMake(testPickerView.bounds.width/1.5 - sStr.bounds.width/2,
@@ -254,6 +255,35 @@ class VibeViewController: UIViewController,UIPickerViewDelegate,UIPickerViewData
         //        }
     }
 
+    override func viewDidLayoutSubviews() {
+        print(#function,testPickerView.frame.width)
+        super.viewDidLayoutSubviews()
+        mStr.frame = CGRectMake(testPickerView.bounds.width/2 - 56,
+                                testPickerView.bounds.height/2 - (mStr.bounds.height/2),
+                                mStr.bounds.width, mStr.bounds.height)
+        
+        //「秒」のラベルを追加
+        
+        sStr.frame = CGRectMake(testPickerView.bounds.width * 3 / 4 - sStr.bounds.width,
+                                testPickerView.bounds.height/2 - (sStr.bounds.height/2),
+                                sStr.bounds.width, sStr.bounds.height)
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        print(#function,testPickerView.frame.width)
+        
+                mStr.frame = CGRectMake(testPickerView.bounds.width/2 - 56,
+                                        testPickerView.bounds.height/2 - (mStr.bounds.height/2),
+                                        mStr.bounds.width, mStr.bounds.height)
+        
+                //「秒」のラベルを追加
+        
+                sStr.frame = CGRectMake(testPickerView.bounds.width * 3 / 4 - sStr.bounds.width,
+                                        testPickerView.bounds.height/2 - (sStr.bounds.height/2),
+                                        sStr.bounds.width, sStr.bounds.height)
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
